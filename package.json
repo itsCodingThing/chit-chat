@@ -1,0 +1,21 @@
+{
+  "name": "chit-chat",
+  "version": "1.0.0",
+  "description": "a chat app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": "8.11.1"
+  },
+  "author": "Bhanu Pratap Singh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
