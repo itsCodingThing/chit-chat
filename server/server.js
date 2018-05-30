@@ -23,13 +23,12 @@ io.on('connection', (socket) => {
         console.log('user is disconnect');
     });
 
-    socket.emit('newMessage', {
-        from: 'bhanu',
-        text: 'yup... it is also working'
-    });
-
     socket.on('createMessage', (message) => {
         console.log(`createdMessage: ${message.from},${message.text}`);
-        
+        io.emit('newMessage', {
+            form: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });      
     })
 });
