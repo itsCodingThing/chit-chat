@@ -4,7 +4,8 @@
   "description": "a chat app",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
   },
   "engines": {
     "node": "8.11.1"
