@@ -22,4 +22,14 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user is disconnect');
     });
+
+    socket.emit('newMessage', {
+        from: 'bhanu',
+        text: 'yup... it is also working'
+    });
+
+    socket.on('createMessage', (message) => {
+        console.log(`createdMessage: ${message.from},${message.text}`);
+        
+    })
 });
