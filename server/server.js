@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketIO = require('socket.io');
+const {generateMessage} = require('./utils/message');
 
 const app = express();
 const server = http.createServer(app);
@@ -19,24 +20,16 @@ server.listen(port, () => {
 io.on('connection', (socket) => {
     console.log('user is connected');
 
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to chit-chat'));
+
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'A new user joined'));
+
+    socket.on('createMessage', (message, callback) => {        
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback();
+    });
+
     socket.on('disconnect', () => {
         console.log('user is disconnect');
     });
-
-    socket.on('createMessage', (message) => {
-        console.log(`createdMessage: ${message.from},${message.text}`);
-    /*
-        io.emit('newMessage', {
-            form: message.from,
-            text: message.text,
-            createdAt: new Date().getTime()
-        });
-    */      
-
-        socket.broadcast.emit('newMessage', {
-            from: message.from,
-            text: message.text,
-            createdAt: new Date().getTime()
-        });
-    })
 });
