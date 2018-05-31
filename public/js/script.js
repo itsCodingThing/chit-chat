@@ -23,5 +23,21 @@ $("#message-form").on("submit", (e) => {
     socket.emit('createMessage', {
         from: 'User',
         text: $("[name=message]").val()
-    }, () => {})
+    }, () => {});
+});
+
+let locationButton = $("#send-location");
+locationButton.on('click', () => {
+    if(!navigator.geolocation) {
+        return alert("Geolocation is not supported");
+    };
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            logitude: position.coords.longitude
+        });
+    }, () => {
+        return alert("Unable to fetch position");
+    });
 });
