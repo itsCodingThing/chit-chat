@@ -2,8 +2,29 @@ console.log('script is running');
 
 const socket = io();
 
+function scrollToBottom() { 
+    let messages = $("#messages");
+    let newMessage = messages.children('li:last-child');
+
+    // heights
+    let clientHeight = messages.prop('clientHeight');
+    let scrollTop = messages.prop('scrollTop');
+    let scrollHeight = messages.prop('scrollHeight');
+    let newMessageHeight = newMessage.innerHeight();
+    let lastMessageHeight = newMessage.prev().innerHeight();
+
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+        messages.scrollTop(scrollHeight);
+    }
+    
+}
+
 socket.on('connect', () => {
     console.log('connected to the server');
+});
+
+socket.on('disconnect', () => {
+    console.log('disconnected from server');
 });
 
 socket.on('newMessage', (message) => {
@@ -14,15 +35,8 @@ socket.on('newMessage', (message) => {
         from: message.from,
         createdAt: formattedTime
     });
-
     $("#messages").append(html);
-    // let li = $("<li></li>");
-    // li.text(`${message.from} ${formattedTime}: ${message.text}`);
-    // $("#messages").append(li);
-});
-
-socket.on('disconnect', () => {
-    console.log('disconnected from server');
+    scrollToBottom();
 });
 
 $("#message-form").on("submit", (e) => {
@@ -42,9 +56,7 @@ locationButton.on('click', () => {
     if(!navigator.geolocation) {
         return alert("Geolocation is not supported");
     };
-
     locationButton.attr('disabled', 'disabled').text('Sending location...');
-    
     navigator.geolocation.getCurrentPosition((position) => {
         locationButton.removeAttr('disabled').text('Send location');
         socket.emit('createLocationMessage', {
@@ -65,15 +77,6 @@ socket.on('generateLocationMessage', (message) => {
         url: message.url,
         createdAt: formattedTime
     });
-
     $("#messages").append(html);
-
-    // let li = $("<li></li>");
-    // let a = $('<a target="_blank">My current location</a>');
-
-    // li.text(`${message.from} ${formattedTime}: `);
-    // a.attr('href', message.url);
-    // li.append(a);
-    // $("#messages").append(li);    
-    
+    scrollToBottom();    
 });
