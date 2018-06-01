@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketIO = require('socket.io');
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const app = express();
 const server = http.createServer(app);
@@ -18,7 +18,6 @@ server.listen(port, () => {
 });
 
 io.on('connection', (socket) => {
-    console.log('user is connected');
 
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to chit-chat'));
 
@@ -26,11 +25,11 @@ io.on('connection', (socket) => {
 
     socket.on('createMessage', (message, callback) => {        
         io.emit('newMessage', generateMessage(message.from, message.text));
-        callback('this is from the server');
+        callback();
     });
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.logitude}`));
+        io.emit('generateLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.logitude));
     });
 
     socket.on('disconnect', () => {
