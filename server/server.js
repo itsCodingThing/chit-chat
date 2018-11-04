@@ -4,7 +4,6 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
-const {isRealString} = require('./utils/valid');
 const {Users} = require('./utils/users');
 
 const app = express();
@@ -15,7 +14,7 @@ const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 1729;
 let users = new Users();
 
-app.use(express.static(publicPath));
+// app.use(express.static(publicPath));
 
 server.listen(port, () => {
     console.log(`Server is running on ${port}`);
@@ -23,7 +22,7 @@ server.listen(port, () => {
 
 io.on('connection', (socket) => {
 
-    
+    console.log('connected to front-end');
     socket.on('join', (param, callback) => {
         if (!param.name || !param.room) {
            return callback('name and room name is required.');
