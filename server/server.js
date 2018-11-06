@@ -27,11 +27,11 @@ io.on('connection', (socket) => {
         if (!param.name || !param.room) {
            return callback('name and room name is required.');
         }
-        
+            
         socket.join(param.room);
         users.removeUser(socket.id);
         users.addUser(socket.id, param.name, param.room);
-        
+
         io.to(param.room).emit('updateUserList', users.getUserList(param.room));
         socket.emit('newMessage', generateMessage('Admin', 'Welcome to chit-chat'));    
         socket.broadcast.to(param.room).emit('newMessage', generateMessage('Admin', `${param.name} has joined.`));
