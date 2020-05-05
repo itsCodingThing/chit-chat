@@ -8,7 +8,7 @@
     "dev": "nodemon server/server.js"
   },
   "engines": {
-    "node": "8.11.1"
+    "node": "12.13.1"
   },
   "author": "Bhanu Pratap Singh",
   "license": "ISC",
